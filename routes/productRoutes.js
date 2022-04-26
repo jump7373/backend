@@ -22,58 +22,18 @@ const storage = multer.diskStorage({
 let upload = multer ({storage})
 
 
-const Productos = async () => {
+router.get(`/`, async (req, res) =>{
     const TLProd = await archivo2.getAll()
-    router.get('/', (req, res) => {
-        res.send(TLProd)
-    })
-}
-Productos()
+    res.send(TLProd)
+})
 
 
-const ProductosRandom = async () => {
-    const productosRan = await archivo2.getAll()
-
-    router.get("/productoRandom", (req, res) => {
-        
-        let productoRandom = productosRan[Math.floor(Math.random() * productosRan.length)];
-        res.send(productoRandom)
-    })
-}
-
-ProductosRandom()
-
-// router.get("/productos/:id", async (req, res) =>{
-//     let productoBuscado = await archivo2.getByID(req.params.id)
+router.get("/:id", async (req, res) =>{
+    let productoBuscado = await archivo2.getByID(req.params.id)
     
 
-//     res.send(productoBuscado)    
-// })
-
-const ProductosId = async () => {
-    const productosPorId = await archivo2.getAll()
-
-    router.get("/:id", (req, res) => {
-        let id = req.params.id
-
-            
-            let productoId = productosPorId.find((item) => {
-                return item.id == id
-            });
-            
-            if(productoId){
-                res.send(productoId)    
-            }else{
-                res.send({Error: "Producto no encontrado"})
-            }
-        
-    })
-}
-
-ProductosId()
-
-
-
+    res.send(productoBuscado)    
+})
 
 router.post("/", upload.single("thumbnail"), (req, res) =>{
     let file = req.file
@@ -95,6 +55,27 @@ router.post("/", upload.single("thumbnail"), (req, res) =>{
     
 })
 
+router.put("/:id", async (req, res)=>{
+    let id = req.params.id
+    const listaProductos = await archivo2.getAll();
+    const productoId = await archivo2.getByID(id);
+
+    const idFind = listaProductos.findIndex((item) => item.id == id)
+
+    if(idFind >= 0){
+        listaProductos[idFind] = {...req.body, id: productoId.id}
+        fs.writeFileSync("../tienda.txt", JSON.stringify(listaProductos));
+        res.send("Producto Actualizado")
+    }else{
+        res.send(`Producto con id ${id} no está en la tienda.`)
+    }
+})
+
+router.delete("/:id", async (req, res)=>{
+    const borrarId = req.params.id;
+
+    res.send(await archivo2.deleteById(borrarId))
+})
 
 
 module.exports = router

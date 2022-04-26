@@ -69,34 +69,6 @@ class Contenedor {
     }
 
     
-    async getByID(idNumber) {
-        const data = await fs.readFile(`./${this.fileName}`, "utf-8", (err, data) => {
-            
-            if (err) {
-                console.log("Error al leer el archivo.")
-
-            } else {
-
-                let dataFile = JSON.parse(data)
-
-                const idFind = dataFile.find((x) => {
-                    return x.id == idNumber
-                })
-
-
-                if (idFind) {
-                    console.log(idFind)
-                    
-                } else {
-                    console.log(null)
-                    
-                }
-            }
-        })
-
-        return JSON.parse(data)
-    }
-
     async getAll() {
         const data = await fs.promises.readFile(`./${this.fileName}`, "utf-8", (err, data) => {
 
@@ -108,38 +80,56 @@ class Contenedor {
         return JSON.parse(data)
     }
 
-
-    deleteById(idNumber) {
-        fs.readFile(`./${this.fileName}`, "utf-8", (err, data) => {
-            if (err) {
-                console.log("Error al leer el archivo.")
-
-            } else {
-
-                let dataFile = JSON.parse(data)
-
-                const idFind = dataFile.find((x) => {
-                    return x.id === idNumber
-                })
-
-                if (idFind) {
-                    const deleteObj = dataFile.filter((x) => {
-                        return x.id != idNumber
-                    })
-                    fs.writeFile(`./${this.fileName}`, JSON.stringify(deleteObj), "utf-8", (err) => {
-                        if (err) {
-                            console.log("No se pudo actualizar el documento")
-                        } else {
-                            console.log("Se actualizó el documento correctamente")
-
-                        }
-                    })
-                } else {
-                    console.log(null)
-                }
-            }
+    async getByID(idNumber){
+        const productos = await this.getAll()
+        const index = productos.find((item) => {
+            return item.id == idNumber
         })
+        try{
+            if(index){
+                return index
+            }else{
+                return console.log("Producto no encontrado")
+            }
+        }
+        catch(err) {
+            console.log(err)
+        }
     }
+
+    
+    async deleteById(idNumber){
+        const productos = await this.getAll();
+
+        if(productos.length > 0){
+            const eliminarProducto = productos.filter((item) => {
+                return item.id !== idNumber
+            });
+
+            fs.writeFileSync(`./${this.fileName}`, JSON.stringify(eliminarProducto))
+            console.log("Producto borrado")
+            
+        }else{
+            console.log("El producto no existe")
+        }
+    }
+
+    // deleteById(idNumber) {
+    //     const listaProductos = this.getAll()
+    //     if(typeof listaProductos == 'object'){
+    //         if(typeof id === 'number' && id <= listaProductos.length && id > 0){
+    //             const eliminarProducto = listaProductos.filter((item) => item.id !== idNumber)
+    //             if(eliminarProducto.length < listaProductos.lengt){
+    //                 fs.writeFileSync(`./${this.fileName}`, JSON.stringify(eliminarProducto))
+    //                 return `El producto con ID ${idNumber} fue eliminado`
+    //             }
+    //             return `El producto con ID ${idNumber} fue borrado`
+    //         }else{
+    //             return `El producto con ID ${idNumber} no existe`
+    //         }
+    //     }
+    //     else return listaProductos
+    // }
 
     deleteAll() {
         fs.writeFile(`./${this.fileName}`, "", "utf-8", (err) => {
