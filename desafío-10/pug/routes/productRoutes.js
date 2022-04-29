@@ -24,8 +24,8 @@ let upload = multer ({storage})
 
 router.get(`/`, async (req, res) =>{
     const TLProd = await archivo2.getAll()
-    // res.send(TLProd)
-    res.render("index", {titulo: "Hola Mundo Boca"})
+    res.send(TLProd)
+    
 })
 
 
