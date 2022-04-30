@@ -24,8 +24,8 @@ let upload = multer ({storage})
 
 router.get(`/`, async (req, res) =>{
     const TLProd = await archivo2.getAll()
-    // res.send(TLProd)
-    res.render("index", {titulo: "Hola Mundo Boca"})
+    
+    res.render("partials/productos", {data: TLProd})
 })
 
 
@@ -37,22 +37,23 @@ router.get("/:id", async (req, res) =>{
 })
 
 router.post("/", upload.single("thumbnail"), (req, res) =>{
-    let file = req.file
-    if(!file){
-        res.status(400).send({message: "Error al cargar"})
-    }
+    // let file = req.file
+    // if(!file){
+    //     res.status(400).send({message: "Error al cargar"})
+    // }
     
     let nuevoProducto ={
         title: req.body.title,
         price: parseInt(req.body.price),
-        thumbnail: req.file.path,
+        // thumbnail: req.file.path,
+        thumbnail: req.body.thumbnail,
         id: parseInt(req.body.id)
     }
     console.log(req.file)
     
     archivo2.save(nuevoProducto)
 
-    res.send(`El nuevo producto es ${nuevoProducto.id}`)
+    res.render("partials/productos")
     
 })
 

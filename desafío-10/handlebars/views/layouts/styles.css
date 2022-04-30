@@ -1,0 +1,12 @@
+.product {
+    display: flex;
+    flex-direction: row;
+    background-color: red;
+}
+
+.cardProduct {
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+}

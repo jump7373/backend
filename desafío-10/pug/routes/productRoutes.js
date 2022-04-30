@@ -24,8 +24,9 @@ let upload = multer ({storage})
 
 router.get(`/`, async (req, res) =>{
     const TLProd = await archivo2.getAll()
-    res.send(TLProd)
+    // res.send(TLProd)
     
+    res.render("productos", {data: TLProd})
 })
 
 

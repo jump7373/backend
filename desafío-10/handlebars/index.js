@@ -10,13 +10,16 @@ app.set("views", "./views")
 
 app.engine("hbs", engine({
     extname:".hbs",
-    defaultLayout:"main.hbs",
+    defaultLayout:"index.hbs",
     partialsDir:__dirname+"/views/partials"
 }))
 // app.use(express.static("public"))
 
 app.use("/api/productos", productRoutes)
 
+app.get("/", (req, res) =>{
+    res.render("partials/home", {})
+})
 
 app.listen (port, ()=>{
     console.log("Server Funcionando")

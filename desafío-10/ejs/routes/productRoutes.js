@@ -24,15 +24,12 @@ let upload = multer ({storage})
 
 router.get(`/`, async (req, res) =>{
     const TLProd = await archivo2.getAll()
-    // res.send(TLProd)
-    res.render("index", {titulo: "Hola Mundo Boca"})
+    res.render("templates/productos", {data: TLProd})
 })
 
 
 router.get("/:id", async (req, res) =>{
-    let productoBuscado = await archivo2.getByID(req.params.id)
-    
-
+    let productoBuscado = await archivo2.getByID(req.params.id)    
     res.send(productoBuscado)    
 })
 

@@ -1,0 +1,24 @@
+
+
+<a class="btn btn-primary" href="/" role="button">Cargar nuevos items</a>
+
+<div class="product" style="display: flex; flex-direction:row; flex-wrap: wrap;">
+    <table class="table container">
+    <thead class="table-dark">
+            <th scope="col" class="display-6">Producto</th>
+            <th scope="col" class="display-6">Imagen</th>
+            <th scope="col" class="display-6">Precio</th>
+        </thead>
+    <tbody>
+    {{#each data}}
+    
+        <tr>
+            <th scope="row"><p style="text-transform: uppercase; font-size:20px">{{this.title}}</p></th>
+            <td><img src="{{this.thumbnail}}" alt="{{this.title}}" style="width: 70px"></td>
+            <td><p class="h5">$ {{this.price}}</p></td>
+        </tr>
+    
+    {{/each}}
+    </tbody>
+    </table>
+</div>
