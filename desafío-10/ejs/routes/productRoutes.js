@@ -4,7 +4,7 @@ const port = 8080;
 const multer = require ("multer")
 
 const Contenedor = require("../classItem");
-const archivo2 = new Contenedor("tienda.txt")
+const archivo2 = new Contenedor("tienda.json")
 
 const { Router } = express
 let router = new Router()
@@ -62,7 +62,7 @@ router.put("/:id", async (req, res)=>{
 
     if(idFind >= 0){
         listaProductos[idFind] = {...req.body, id: productoId.id}
-        fs.writeFileSync("../tienda.txt", JSON.stringify(listaProductos));
+        fs.writeFileSync("../tienda.json", JSON.stringify(listaProductos));
         res.send("Producto Actualizado")
     }else{
         res.send(`Producto con id ${id} no está en la tienda.`)

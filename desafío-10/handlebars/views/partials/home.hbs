@@ -4,16 +4,30 @@
     <br /><br />
     <form action="/api/productos" enctype="multipart/form-data" method="post" class="mb-3 container" >
       <h1>Agregar productos nuevos</h1>
-      <label for="POST-name" class="form-label">Nombre</label>
+      <label for="POST-name" class="form-label" id="nombreProducto">Nombre</label>
       <input type="text" name="title" class="form-control" /><br />
-      <label for="POST-name" class="form-label">Precio</label>
+      <label for="POST-name" class="form-label" id="precioProducto">Precio</label>
       <input type="number" name="price" class="form-control" /><br />
-      <label for="POST-file" class="form-label">Imagen</label>      
+      <label for="POST-file" class="form-label" id="imagenProducto">Imagen</label>      
       <input type="text" name="thumbnail" class="form-control"><br>
-      <label for="POST-name" class="form-label">ID</label>
+      <label for="POST-name" class="form-label" id="idProducto">ID</label>
       <input type="number" name="id" class="form-control"/><br />
       <input class="btn btn-primary" type="submit" value="save" >
     </form>
 
+<div style="display: flex; flex-direction:row; flex-wrap: wrap;">
+    <table class="table container">
+    <thead class="table-dark">
+            <th scope="col" class="display-6">Producto</th>
+            <th scope="col" class="display-6">Imagen</th>
+            <th scope="col" class="display-6">Precio</th>
+        </thead>
+    <div id="listaSocket">
     
+    </div>
+    </table>
+</div>
+
+
+
     

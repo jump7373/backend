@@ -1,177 +1,97 @@
-const { Console } = require("console")
-const { json } = require("express/lib/response")
-const fs = require(`fs`)
-const { resolve } = require("path")
-const { argv } = require("process")
-
-
+const fs = require ("fs");
+const { connect } = require("http2");
+const { resolve } = require("path");
 
 class Contenedor {
-    constructor(fileName) {
-        this.fileName = fileName
-        this.stock = []
-
+    constructor (file){
+        this.file = file;
     }
 
-    save(object) {
-
-
-        this.stock.push(object)
-
-
-        fs.readFile(`./${this.fileName}`, "utf-8", (err, data) => {
-            if (err) {
-                console.log("Error al leer el archivo.")
-                fs.writeFile(`./${this.fileName}`, JSON.stringify(this.stock), "utf-8", (err) => {
-                    if (err) {
-                        console.log("No se pudo actualizar el documento")
-                    } else {
-                        console.log("Se actualizó el documento correctamente")
-
-                    }
-                })
-            } else {
-
-                
-                if (data === "") {
-                    fs.writeFile(`./${this.fileName}`, JSON.stringify(this.stock), "utf-8", (err) => {
-                        if (err) {
-                            console.log("No se pudo actualizar el documento vacío")
-                        } else {
-                            console.log("Se agregó el primer objeto al archivo")
-
-                        }
-                    })
-                } else {
-
-                    const dataFile = JSON.parse(data)
-                    this.stock.push(...dataFile)
-
-
-                    fs.writeFile(`./${this.fileName}`, JSON.stringify(this.stock), "utf-8", (err) => {
-                        if (err) {
-                            console.log("No se pudo actualizar el documento")
-                        } else {
-                            console.log("Se actualizó el documento correctamente")
-
-                        }
-                    })
+    async save(object) {
+        const item = await new Promise ((res, rej) =>{
+            return fs.readFile(`./${this.file}`, `utf-8`, (err, data) =>{
+                if(err){
+                    rej(err)
                 }
-
-
-
-            }
-            console.log(object.id)
+                const lista = JSON.parse(data);
+                const prod = {...object, id: lista.length !== 0 ? lista[lista.length - 1].id + 1 : 1};
+                lista.push(prod)
+                fs.writeFile(`./${this.file}`, JSON.stringify(lista, null, 2), `utf-8`, (err) => err && console.log(err));
+                return res(prod)
+            })
         })
-
-
-
+        return item;
     }
 
-    
+    async getById(id) {
+        const item = await new Promise((res, rej) =>{
+            return fs.readFile(`./${this.file}`, `utf-8`, (err, data) =>{
+                if(err)return rej(err);
+
+                const lista = JSON.stringify(data);
+                const find = lista.find(item => item.id === parseInt(id, 10))
+                return res(find !== undefined ? find : null)
+            })
+        })
+        return item;
+    }
+
     async getAll() {
-        const data = await fs.promises.readFile(`./${this.fileName}`, "utf-8", (err, data) => {
-
-            if (err) throw err
-            const info = JSON.parse(data)
-            return info
+        const listadoProductos = await new Promise((res, rej) =>{
+            return fs.readFile(`./${this.file}`, `utf-8`, (err, data) =>{
+                if(err) rej(err);
+                return res(JSON.parse(data))
+            })
         })
-
-        return JSON.parse(data)
+        return listadoProductos;
     }
 
-    async getByID(idNumber){
-        const productos = await this.getAll()
-        const index = productos.find((item) => {
-            return item.id == idNumber
+    async deleteById(id) {
+        const borrarProducto = await new Promise((res, rej) =>{
+            return fs.readFile(`./${this.file}`, `utf-8`, (err, data) =>{
+                if(err)return rej(err)
+
+                const lista = JSON.parse(data);
+                const listaActualizada = lista.filter(item => item.id !== parseInt(id, 10))
+                fs.writeFile(`./${this.file}`, JSON.stringify(listaActualizada, null, 2),`utf-8`, (err)=> err && console.log(err))
+                return res(listaActualizada)
+            })
         })
-        try{
-            if(index){
-                return index
-            }else{
-                return console.log("Producto no encontrado")
-            }
-        }
-        catch(err) {
-            console.log(err)
-        }
+        return borrarProducto;
     }
 
-    
-    async deleteById(idNumber){
-        const productos = await this.getAll();
-
-        if(productos.length > 0){
-            const eliminarProducto = productos.filter((item) => {
-                return item.id !== idNumber
-            });
-
-            fs.writeFileSync(`./${this.fileName}`, JSON.stringify(eliminarProducto))
-            console.log("Producto borrado")
-            
-        }else{
-            console.log("El producto no existe")
-        }
-    }
-
-    // deleteById(idNumber) {
-    //     const listaProductos = this.getAll()
-    //     if(typeof listaProductos == 'object'){
-    //         if(typeof id === 'number' && id <= listaProductos.length && id > 0){
-    //             const eliminarProducto = listaProductos.filter((item) => item.id !== idNumber)
-    //             if(eliminarProducto.length < listaProductos.lengt){
-    //                 fs.writeFileSync(`./${this.fileName}`, JSON.stringify(eliminarProducto))
-    //                 return `El producto con ID ${idNumber} fue eliminado`
-    //             }
-    //             return `El producto con ID ${idNumber} fue borrado`
-    //         }else{
-    //             return `El producto con ID ${idNumber} no existe`
-    //         }
-    //     }
-    //     else return listaProductos
-    // }
-
-    deleteAll() {
-        fs.writeFile(`./${this.fileName}`, "", "utf-8", (err) => {
-            if (err) {
-                console.log("No se pudo actualizar el documento")
-            } else {
-                console.log("Se borró todo el contenido del documento")
-
-            }
+    async getRandom() {
+        const listadoProductos = await new Promise ((res, rej) => {
+            return fs.readFile(`./${this.file}`, `utf-8`, (err, data) =>{
+                if(err) return rej(err);
+                return res(JSON.parse(data));
+            })
         })
+        const productoRandom = (min, max) => Math.floor(math.random() * (max - min)) + min;
+        return listadoProductos[productoRandom(0, 3)]
     }
 
+    async editById(id, item){
+        const productoEditado = await new Promise((res, rej) => {
+            return fs.readFile(`./${this.file}`, `utf-8`, (err, data) =>{
+                if(err) rej(err)
+                
+                const lista = JSON.parse(data)
+                const nuevaLista = lista.filter(item => item.id !== parseInt(id, 10))
+                const productoActualizado = {
+                    id: (nuevaLista[nuevaLista.length-1].id) + 1,
+                    title: item.name,
+                    price: item.price,
+                    thumbnail: item.thumbnail
+                }
+                nuevaLista.push(productoActualizado)
+                fs.writeFile(`./${this.file}`, JSON.stringify(nuevaLista, null, 2), `utf-8`, (err) => err && console.log(err));
+                return res(nuevaLista)
+            })
+        })
+        return productoEditado;
+    }
+
+
 }
 
-const escuadra = {
-    title: 'Escuadra',
-    price: 123.45,
-    thumbnail: 'https://cdn3.iconfinder.com/data/icons/education-209/64/ruler-triangle-stationary-school-256.png',
-    id: 1
-}
-
-const calculadora = {
-    title: 'Calculadora',
-    price: 234.56,
-    thumbnail: 'https://cdn3.iconfinder.com/data/icons/education-209/64/calculator-math-tool-school-256.png',
-    id: 2
-}
-
-const globoTerraqueo = {
-    title: 'Globo Terráqueo',
-    price: 345.67,
-    thumbnail: 'https://cdn3.iconfinder.com/data/icons/education-209/64/globe-earth-geograhy-planet-school-256.png',
-    id: 3
-}
-
-
-//archivo.save(escuadra)
-//archivo.save(calculadora)
-//archivo.save(globoTerraqueo)
-//archivo.getByID(1)
-//archivo.getAll()
-// archivo.deleteById(2)
-//archivo.deleteAll()
-
-module.exports = Contenedor 

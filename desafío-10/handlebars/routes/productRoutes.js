@@ -3,8 +3,8 @@ const fs = require("fs");
 const port = 8080;
 const multer = require ("multer")
 
-const Contenedor = require("../classItem");
-const archivo2 = new Contenedor("tienda.txt")
+const Contenedor = require("../classItem2");
+const archivo2 = new Contenedor("tienda.json")
 
 const { Router } = express
 let router = new Router()
