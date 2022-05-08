@@ -1,4 +1,3 @@
-Iconset: Education (https://www.iconfinder.com/iconsets/education-209)
-Author: bamicon (https://www.iconfinder.com/Tempebacem)
-License: Creative Commons (Attribution 3.0 Unported) (http://creativecommons.org/licenses/by/3.0/)
-Download date: 2022-04-29
+Los 3 motores de plantillas me parecieron interesantes, cada uno tiene sus ventajas, PUG ahorra tipeo y ayuda a comprender mejor las jerarquías de HTML, además de que es más rápida la configuración. Handlebars tiene una configuración más compleja, pero tiene un manera más clásica de escribir código, lo que facilita y agiliza en esta medida. EJS me parece que junta la configuración más rápida de PUG y el mejor manejo de escritura de código de Handlebars en HTML y en manejo de variables, aunque hay que agarrarle la mano al manejo de los signos de apertura y cierre.
+
+Si hay que utilizar un motor a lo largo del proyecto iré con EJS.
