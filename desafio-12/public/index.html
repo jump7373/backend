@@ -14,64 +14,83 @@
 
     <title>Tienda de Cerveza</title>
   </head>
+  
+
   <body class="container-fluid">
     <div>
       <div class="p-3">
         <h1>Ingrese un Producto</h1>
-        <form
-          id="ingresoDeProductos"
-        >
-            <div class="mb-3">
-                <label for="title" class="form-label">Nombre</label>
-                <input type="text" name="title" class="form-control" id="productTitle">
-            </div>
+        <form id="ingresoDeProductos" action="/api/productos" method="post">
+          <div class="mb-3">
+            <label for="POST-name" class="form-label">Nombre</label>
+            <input type="text" name="title" class="form-control"/>
+          </div>
 
-            <div class="mb-3">
-                <label for="price" class="form-label">Precio</label>
-                <input type="number" name="price" class="form-control" id="productPrice">
-            </div>
+          <div class="mb-3">
+            <label for="POST-name" class="form-label">Precio</label>
+            <input type="number" name="price" class="form-control"/>
+          </div>
 
-            <div class="mb-3">
-                <label for="thumbnail" class="form-label">Imagen</label>
-                <input type="text" name="thumbnail" class="form-control" id="productImage">
-            </div>
+          <div class="mb-3">
+            <label for="POST-name" class="form-label">Descripción</label>
+            <input type="text" name="descripcion" class="form-control"/>
+          </div>
 
-            <button class="btn btn-primary mt-3">Enviar</button>
+          <div class="mb-3">
+            <label for="POST-name" class="form-label">Stock</label>
+            <input type="number" name="stock" class="form-control"/>
+          </div>
+
+
+          <div class="mb-3">
+            <label for="POST-name" class="form-label">Imagen</label>
+            <input type="text" name="thumbnail" class="form-control"/>
+          </div>
+
+          <button class="btn btn-primary mt-3" type="submit">Enviar</button>
         </form>
       </div>
 
       <table class="table table-striped p3">
-          <thead>
-              <tr>
-                  <th scope="col">Nombre</th>
-                  <th scope="col">Precio</th>
-                  <th scope="col">Imagen</th>
-              </tr>
-          </thead>
-          <tbody id="productList">
-
-          </tbody>
+        <thead>
+          <tr>
+            <th scope="col">Nombre</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Imagen</th>
+          </tr>
+        </thead>
+        <tbody id="productList"></tbody>
       </table>
 
       <div class="mt-5">
-          <h2>Chatea con nosotros</h2>
-          <div class="p3">
-              <form id="chatForm">
-                  <div class="mb-3">
-                      <label for="email" class="form-label">Correo</label>
-                      <input type="email" name="email" class="form-control" id="emailForm">
-                  </div>
+        <h2>Chatea con nosotros</h2>
+        <div class="p3">
+          <form id="chatForm">
+            <div class="mb-3">
+              <label for="email" class="form-label">Correo</label>
+              <input
+                type="email"
+                name="email"
+                class="form-control"
+                id="emailForm"
+              />
+            </div>
 
-                  <div class="mb-3">
-                      <label for="message" class="form-label">Mensaje</label>
-                      <textarea type="text" name="message" id="messageForm"  class="form-control"></textarea>
-                  </div>
+            <div class="mb-3">
+              <label for="message" class="form-label">Mensaje</label>
+              <textarea
+                type="text"
+                name="message"
+                id="messageForm"
+                class="form-control"
+              ></textarea>
+            </div>
 
-                  <button class="btn btn-primary mt-3">Enviar</button>
-              </form>
-              <div id="messageError" class="mt-3"></div>
-          </div>
-          <div id="messageSent"></div>
+            <button class="btn btn-primary mt-3">Enviar</button>
+          </form>
+          <div id="messageError" class="mt-3"></div>
+        </div>
+        <div id="messageSent"></div>
       </div>
     </div>
 
@@ -86,6 +105,7 @@
       crossorigin="anonymous"
     ></script>
     <script src="/socket.io/socket.io.js"></script>
+    
     <script src="./index.js"></script>
   </body>
 </html>

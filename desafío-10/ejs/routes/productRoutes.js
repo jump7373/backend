@@ -45,12 +45,8 @@ router.post("/", upload.single("thumbnail"), (req, res) =>{
         thumbnail: req.file.path,
         id: parseInt(req.body.id)
     }
-    console.log(req.file)
     
-    archivo2.save(nuevoProducto)
-
-    res.send(`El nuevo producto es ${nuevoProducto.id}`)
-    
+    archivo2.save(nuevoProducto)   
 })
 
 router.put("/:id", async (req, res)=>{

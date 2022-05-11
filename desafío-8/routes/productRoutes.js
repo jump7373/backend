@@ -4,7 +4,7 @@ const port = 8080;
 const multer = require ("multer")
 
 const Contenedor = require("../classItem");
-const archivo2 = new Contenedor("tienda.json")
+const archivo2 = new Contenedor("tienda.txt")
 
 const { Router } = express
 let router = new Router()
@@ -37,15 +37,15 @@ router.get("/:id", async (req, res) =>{
 })
 
 router.post("/", upload.single("thumbnail"), (req, res) =>{
-    let file = req.file
-    if(!file){
-        res.status(400).send({message: "Error al cargar"})
-    }
+    // let file = req.file
+    // if(!file){
+    //     res.status(400).send({message: "Error al cargar"})
+    // }
     
     let nuevoProducto ={
         title: req.body.title,
         price: parseInt(req.body.price),
-        thumbnail: req.file.path,
+        thumbnail: req.body.thumbnail,
         id: parseInt(req.body.id)
     }
     console.log(req.file)

@@ -1,25 +1,26 @@
 const express = require ("express");
-const app = express();
 const productRoutes = require ("./routes/productRoutes");
 const path = require('path');
 const listadoProductos = require ('./tienda.json');
 const productMethods = require("./api/productMethods");
-
 const chatJS = require("./chat");
-let chat = new chatJS();
-let mensajes = require("./mensajes.json");
-
-
-const http = require("http")
-const server = http.createServer(app)
-
 const { Server } = require("socket.io")
-const io = new Server(server)
+let mensajes = require("./mensajes.json");
+const http = require("http")
 
-app.use(express.json())
-app.use(express.urlencoded({extended: false}))
+const app = express();
+const server = http.createServer(app)
+const io = new Server(server)
+let chat = new chatJS();
+
+//app.use(express.json())
+app.use(express.urlencoded({extended: true}))
 app.use(express.static(path.join(__dirname + `/public`)))
-app.use(`/api`, productRoutes)
+app.use("/api/productos", productRoutes)
+
+
+app.set("view engine", "ejs")
+app.set("views", "./views")
 
 const port = process.env.PORT || 8080
 
@@ -40,5 +41,5 @@ server.listen(port, () =>{
     console.log(`Server in port ${port}!`)
 })
 
-app.use("/api/productos", productRoutes)
+
 

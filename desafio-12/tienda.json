@@ -1,14 +1,11 @@
 [
   {
     "title": "Quilmes",
-    "price": "100",
+    "descripcion": "Cerveza Quilmes - Lata 473 ML",
+    "price": 130,
     "thumbnail": "https://cdn.shopify.com/s/files/1/0254/2947/5433/products/cerveza-quilmes-clasica-473-siempreencasa_1_1000x.png?v=1635358210",
+    "stock": "100",
+    "timestamp": 1652142393726,
     "id": 1
-  },
-  {
-    "title": "Six Pack Schneider",
-    "price": "680",
-    "thumbnail": "https://beermarket.com.ar/wp-content/uploads/2020/11/schneider-x6.jpg",
-    "id": 2
   }
 ]

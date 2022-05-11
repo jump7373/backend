@@ -2,7 +2,7 @@ const express = require ("express")
 const app = express()
 const productRoutes = require ("./routes/productRoutes.js")
 const {engine} = require("express-handlebars")
-const port = 8080;
+const port = 8090;
 
 app.use(express.json())
 app.set("view engine", "hbs")
@@ -13,7 +13,7 @@ app.engine("hbs", engine({
     defaultLayout:"main.hbs",
     partialsDir:__dirname+"/views/partials"
 }))
-// app.use(express.static("public"))
+app.use(express.static("public"))
 
 app.use("/api/productos", productRoutes)
 

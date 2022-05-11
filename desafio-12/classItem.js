@@ -1,6 +1,5 @@
 const fs = require ("fs");
 
-
 class Contenedor {
     constructor (file){
         this.file = file;
@@ -23,16 +22,20 @@ class Contenedor {
     }
 
     async getById(id) {
-        const item = await new Promise((res, rej) =>{
-            return fs.readFile(`./${this.file}`, `utf-8`, (err, data) =>{
-                if(err)return rej(err);
-
-                const lista = JSON.stringify(data);
-                const find = lista.find(item => item.id === parseInt(id, 10))
-                return res(find !== undefined ? find : null)
-            })
+        const productos = await this.getAll()
+        const index = productos.find((item) =>{
+            return item.id === parseInt(id)
         })
-        return item;
+        try{
+            if(index){
+                return index
+            }else{
+                return console.log("Producto no encontrado")
+            }
+        }
+        catch(err) {
+            console.log(err)
+        }
     }
 
     async getAll() {
