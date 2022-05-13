@@ -39,7 +39,7 @@ productRouter.post("/", isAdmin, async (req, res) => {
      } 
      
    await archivo.save(nuevoProducto)   
-   res.send("Producto cargado correctamente")
+   res.redirect("/")
 })
 
 productRouter.put("/", isAdmin, async (req, res) => {
