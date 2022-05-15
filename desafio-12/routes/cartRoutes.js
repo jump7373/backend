@@ -1,18 +1,23 @@
 const express = require("express")
 const { Router } = express
 const routerCarrito = new Router()
+const Carrito = require("../classCart")
+const archivoCarrito = new Carrito("clientes.json")
+archivoCarrito.setCart()
 const Contenedor = require ("../classItem")
 const archivoProducto = new Contenedor("../tienda.json")
-const isAdmin = require ("../admin")
-const Carrito = require("../classCart")
-const archivoCarrito = new Carrito("../clientes.json")
+const isAdmin = require ("../middlewares/admin")
+
+
 
 routerCarrito.post("/", async (req,res) =>{
-     res.send(await archivoCarrito.create())
+    res.json(await archivoCarrito.createCart())
+    
 })
 
-routerCarrito.post("/:cartId/products", async (req,res) =>{
-     let response = await archivoCarrito.addProduct(req.params.cartId, req.body.productId)
+
+routerCarrito.post("/:cartId/products/:productId", async (req,res) =>{
+     let response = await archivoCarrito.addProduct(req.params.cartId, req.params.productId)
      response.error ? res.status(400).json(response) : res.status(200).send();
 })
 

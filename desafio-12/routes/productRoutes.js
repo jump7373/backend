@@ -3,7 +3,7 @@ const { Router } = express
 const productRouter = new Router()
 const Contenedor = require("../classItem")
 const archivo = new Contenedor("tienda.json")
-const isAdmin = require("../admin")
+const isAdmin = require("../middlewares/admin")
 
 
 const productMethods = require("../api/productMethods")
@@ -33,8 +33,8 @@ productRouter.post("/", isAdmin, async (req, res) => {
          descripcion: req.body.descripcion,
          price: parseInt(req.body.price),
          thumbnail: req.body.thumbnail,
-         stock: req.body.stock,
-         timestamp: Date.now()
+         stock: parseInt(req.body.stock),
+         timestamp: new Date()
                
      } 
      
@@ -42,7 +42,7 @@ productRouter.post("/", isAdmin, async (req, res) => {
    res.redirect("/")
 })
 
-productRouter.put("/", isAdmin, async (req, res) => {
+productRouter.put("/:id", isAdmin, async (req, res) => {
    let id = req.params.id
 
    const listaProductos = await archivo.getAll();

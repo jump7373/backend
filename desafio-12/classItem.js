@@ -12,7 +12,7 @@ class Contenedor {
                     reject(err)
                 }
                 const lista = JSON.parse(data);
-                const prod = { ...object, id: lista.length !== 0 ? lista[lista.length - 1].id + 1 : 1}
+                const prod = { ...object, id: lista.length !== 0 ? lista[lista.length - 1].id + 1 : 1, código: lista.length !== 0 ? lista[lista.length - 1].id + 1 : 1}
                 lista.push(prod)                
                 fs.writeFile(`./${this.file}`, JSON.stringify(lista, null, 2), `utf-8`, (err) => err && console.log(err));
                 return resolve(prod)

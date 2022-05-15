@@ -9,7 +9,7 @@ class Carrito {
         this.cart = []
     }
 
-    fileExists = async () => fs.fileExists(this.file)
+    fileExists = async () => fs.existsSync(this.file)
 
     readFile = async () => JSON.parse(await fs.promises.readFile(this.file, "utf-8"));
 
@@ -19,19 +19,24 @@ class Carrito {
 
     findProductIndex = (cartId, productId) => {
         let cartIndex = this.findID(cartId)
-        let productIndex = this.cart[cartIndex].products.findID((item) => item.id == productId)
+        let productIndex = this.cart[cartIndex].products.findIndex((item) => item.id == productId)
         return productIndex;
     }
 
-    create = async () => {
-        if (await this.fileExists()) {
+    createCart = async () => {
+                
+        if (await this.fileExists()) {     
+            
             try {
-                let id, newCart;
-                id = this.cart.length !== 0 ? this.cart[this.cart.length - 1].id + 1 : 1;
-                newCart = { id, products: [] }
-                this.cart.push(newCart);
-                await fs.promises.writeFile(this.path, JSON.stringify(this.cart));
-                return { cartId: newCart.id }
+                
+                let nuevoCarrito = {
+                    id: this.cart.length !== 0 ? this.cart[this.cart.length - 1].id + 1 : 1,
+                    products: [] 
+                }
+
+                this.cart.push(nuevoCarrito);
+                await fs.promises.writeFile(this.file, JSON.stringify(this.cart), `utf-8`);
+                return { cartId: nuevoCarrito.id }
             } catch (err) {
                 console.log("Error: " + err)
                 return { error: "Carrito no creado" }
@@ -58,7 +63,7 @@ class Carrito {
     }
 
     get = async (cartId) => {
-        if (await this.file.fileExists()) {
+        if (await this.fileExists()) {
             try {
                 let cart = this.cart.find((item) => item.id == cartId)
                 if (cart) {
@@ -77,7 +82,10 @@ class Carrito {
     }
 
     addProduct = async(cartId, productId) => {
-        if(await this.file.fileExists()){
+        
+         
+        if(await this.fileExists()){
+
             try{
                 const newProduct = await productList.getById(productId);
                 let indexUpdate = this.findID(cartId)
@@ -99,7 +107,7 @@ class Carrito {
     }
 
     deleteProduct = async (cartId, productId) =>{
-        if (await this.file.fileExists()){
+        if (await this.fileExists()){
             try{
                 let cartIndex = this.findID(cartId)
                 let productIndex = this.findProductIndex(cartId, productId)
@@ -121,7 +129,7 @@ class Carrito {
     }
 
     deleteCart = async (cartId) => {
-        if(await this.file.fileExists()) {
+        if(await this.fileExists()) {
             try{
                 let cartIndex = this.findID(cartId)
                 if(cartIndex >= 0){

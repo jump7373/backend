@@ -6,6 +6,47 @@
     "thumbnail": "https://cdn.shopify.com/s/files/1/0254/2947/5433/products/cerveza-quilmes-clasica-473-siempreencasa_1_1000x.png?v=1635358210",
     "stock": "100",
     "timestamp": 1652142393726,
-    "id": 1
+    "id": 1,
+    "código": 2
+  },
+  {
+    "title": "Patagonia 24.7",
+    "descripcion": "Cerveza Patagonia lata por 473 ML",
+    "price": 180,
+    "thumbnail": "http://cepadevinos.com/wp-content/uploads/2021/01/B064.png",
+    "stock": 20,
+    "timestamp": 1652628409057,
+    "id": 2,
+    "código": 2
+  },
+  {
+    "title": "Stella Artois",
+    "descripcion": "Cerveza Stella Artoois Lata por 473ml",
+    "price": 215,
+    "thumbnail": "https://rojoynegro.com.ar/pedidos/wp-content/uploads/2020/07/cerveza-stella-artois-lata-473-ml1-ebf7da00967ac0788215684053276672-640-0.jpg",
+    "stock": 35,
+    "timestamp": 1652628440109,
+    "id": 3,
+    "código": 3
+  },
+  {
+    "title": "Cerveza Bitburger",
+    "descripcion": "Cerveza alemana lata por 473 ml",
+    "price": 315,
+    "thumbnail": "https://latablita.com.ar/wp-content/uploads/2021/09/cerveza-bitburguer.jpg",
+    "stock": 15,
+    "timestamp": 1652628515491,
+    "id": 4,
+    "código": 4
+  },
+  {
+    "title": "Stella Artois",
+    "descripcion": "Cerveza Patagonia lata por 473 ML",
+    "price": 123,
+    "thumbnail": "https://rojoynegro.com.ar/pedidos/wp-content/uploads/2020/07/cerveza-stella-artois-lata-473-ml1-ebf7da00967ac0788215684053276672-640-0.jpg",
+    "stock": 13,
+    "timestamp": "2022-05-15T15:33:13.858Z",
+    "id": 5,
+    "código": 5
   }
 ]

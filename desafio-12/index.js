@@ -1,7 +1,9 @@
 const express = require ("express");
 const productRoutes = require ("./routes/productRoutes");
+const cartRoutes = require ("./routes/cartRoutes")
 const path = require('path');
 const listadoProductos = require ('./tienda.json');
+const listadoClientes = require (`./routes/clientes.json`)
 const productMethods = require("./api/productMethods");
 const chatJS = require("./chat");
 const { Server } = require("socket.io")
@@ -17,12 +19,13 @@ let chat = new chatJS();
 app.use(express.urlencoded({extended: true}))
 app.use(express.static(path.join(__dirname + `/public`)))
 app.use("/api/productos", productRoutes)
+app.use("/api/carrito", cartRoutes)
 
 
 app.set("view engine", "ejs")
 app.set("views", "./views")
 
-const port = process.env.PORT || 8080
+const port = process.env.PORT || 3000
 
 io.on(`connection`, (socket) => {
     
