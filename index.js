@@ -1,27 +1,33 @@
 const express = require ("express");
-const app = express();
 const productRoutes = require ("./routes/productRoutes");
+const cartRoutes = require ("./routes/cartRoutes")
 const path = require('path');
 const listadoProductos = require ('./tienda.json');
+const listadoClientes = require (`./routes/clientes.json`)
 const productMethods = require("./api/productMethods");
-
 const chatJS = require("./chat");
-let chat = new chatJS();
-let mensajes = require("./mensajes.json");
-
-
-const http = require("http")
-const server = http.createServer(app)
-
 const { Server } = require("socket.io")
+let mensajes = require("./mensajes.json");
+const http = require("http")
+const knex = require("./db/knexMySQL")
+
+const app = express();
+const server = http.createServer(app)
 const io = new Server(server)
+let chat = new chatJS();
+
 
 app.use(express.json())
-app.use(express.urlencoded({extended: false}))
+app.use(express.urlencoded({extended: true}))
 app.use(express.static(path.join(__dirname + `/public`)))
-app.use(`/api`, productRoutes)
+app.use("/api/productos", productRoutes)
+app.use("/api/carrito", cartRoutes)
 
-const port = process.env.PORT || 8080
+
+app.set("view engine", "ejs")
+app.set("views", "./views")
+
+const port = process.env.PORT || 3000
 
 io.on(`connection`, (socket) => {
     
@@ -30,8 +36,9 @@ io.on(`connection`, (socket) => {
         productMethods.saveProductSocket(data)
     })
 
-    socket.emit(`chatActualizado`, mensajes)
+    socket.emit(`chatActualizado`, chat)
     socket.on(`newMessage`, data =>{
+        
         chat.saveMessage(data)
     })
 })
@@ -40,5 +47,5 @@ server.listen(port, () =>{
     console.log(`Server in port ${port}!`)
 })
 
-app.use("/api/productos", productRoutes)
+
 

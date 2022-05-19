@@ -1,93 +1,61 @@
 const fs = require ("fs");
-
+const knex = require("./db/knexMySQL")
 
 class Contenedor {
-    constructor (file){
-        this.file = file;
+    constructor (){
+        this.knex = knex;
     }
 
     async save(object) {
-        const item = await new Promise ((resolve, reject) =>{
-            return fs.readFile(`./${this.file}`, `utf-8`, (err, data) =>{
-                if(err){
-                    reject(err)
-                }
-                const lista = JSON.parse(data);
-                const prod = { ...object, id: lista.length !== 0 ? lista[lista.length - 1].id + 1 : 1}
-                lista.push(prod)                
-                fs.writeFile(`./${this.file}`, JSON.stringify(lista, null, 2), `utf-8`, (err) => err && console.log(err));
-                return resolve(prod)
-            })
-        })
-        return item;
+       
+        await this.knex("productos").insert(object).then(() => {
+            console.log(`Producto cargado`)
+         }).catch(err => {
+            console.log(err)
+         })
     }
 
     async getById(id) {
-        const item = await new Promise((res, rej) =>{
-            return fs.readFile(`./${this.file}`, `utf-8`, (err, data) =>{
-                if(err)return rej(err);
-
-                const lista = JSON.stringify(data);
-                const find = lista.find(item => item.id === parseInt(id, 10))
-                return res(find !== undefined ? find : null)
-            })
-        })
-        return item;
+        
+        const product = await knex.from("productos").select("*").where({id: id})
+        
+        return product;
     }
 
     async getAll() {
-        const listadoProductos = await new Promise((res, rej) =>{
-            return fs.readFile(`./${this.file}`, `utf-8`, (err, data) =>{
-                if(err) rej(err);
-                return res(JSON.parse(data))
-            })
-        })
-        return listadoProductos;
+        
+        const product = await knex.from("productos").select("*")
+        
+        return product;
     }
 
     async deleteById(id) {
-        const borrarProducto = await new Promise((res, rej) =>{
-            return fs.readFile(`./${this.file}`, `utf-8`, (err, data) =>{
-                if(err)return rej(err)
-
-                const lista = JSON.parse(data);
-                const listaActualizada = lista.filter(item => item.id !== parseInt(id, 10))
-                fs.writeFile(`./${this.file}`, JSON.stringify(listaActualizada, null, 2),`utf-8`, (err)=> err && console.log(err))
-                return res(listaActualizada)
-            })
-        })
+        const borrarProducto = await knex.from("productos").where({id: id}).del()
+        
         return borrarProducto;
     }
 
     async getRandom() {
-        const listadoProductos = await new Promise ((res, rej) => {
-            return fs.readFile(`./${this.file}`, `utf-8`, (err, data) =>{
-                if(err) return rej(err);
-                return res(JSON.parse(data));
-            })
-        })
+        const listadoProductos = await this.getAll()
+
         const productoRandom = (min, max) => Math.floor(math.random() * (max - min)) + min;
         return listadoProductos[productoRandom(0, 3)]
     }
 
     async editById(id, item){
-        const productoEditado = await new Promise((res, rej) => {
-            return fs.readFile(`./${this.file}`, `utf-8`, (err, data) =>{
-                if(err) rej(err)
-                
-                const lista = JSON.parse(data)
-                const nuevaLista = lista.filter(item => item.id !== parseInt(id, 10))
-                const productoActualizado = {
-                    id: (nuevaLista[nuevaLista.length-1].id) + 1,
-                    title: item.name,
-                    price: item.price,
-                    thumbnail: item.thumbnail
-                }
-                nuevaLista.push(productoActualizado)
-                fs.writeFile(`./${this.file}`, JSON.stringify(nuevaLista, null, 2), `utf-8`, (err) => err && console.log(err));
-                return res(nuevaLista)
-            })
+        
+        const productoEditado = await knex("productos").where({id: id}).update({
+            
+            title: item.title,
+            descripcion: item.descripcion,
+            price: item.price,
+            thumbnail: item.thumbnail,
+            stock: item.stock,
+            timestamp: item.timestamp,
+            codigo: item.codigo
+            
         })
+
         return productoEditado;
     }
 
