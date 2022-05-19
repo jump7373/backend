@@ -7,7 +7,7 @@ const isAdmin = require("../middlewares/admin")
 
 
 const productMethods = require("../api/productMethods")
-const knex = require("../db/knexMySQL")
+const {knexMySQL} = require("../db/knexMySQL")
 
 const urlForm = "/form"
 const form = 'public/index.html'

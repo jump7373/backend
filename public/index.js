@@ -16,27 +16,6 @@ const mostrarProductos = lista => {
         document.getElementById(`productList`).innerHTML = prod
 }
 
-// const agregarProducto = () =>{
-//     let title = document.getElementById("productTitle").value
-//     let price = document.getElementById(`productPrice`).value
-//     let thumbnail = document.getElementById(`productImage`).value
-//     const prod = {
-//         title: title,
-//         price: price,
-//         thumbnail: thumbnail
-//     }
-//     title = document.getElementById("productTitle").value = ''
-//     price = document.getElementById("productPrice").value = ''
-//     thumbnail = document.getElementById("productImage").value = ''
-//     socket.emit("newProduct", prod)
-// }
-
-// document.querySelector("#ingresoDeProductos").addEventListener("submit", (e) =>{
-//     e.preventDefault()
-//     agregarProducto()
-// })
-
-
 
 //Chat
 socket.on(`chatActualizado`, (data) =>{

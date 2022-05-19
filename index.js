@@ -2,14 +2,12 @@ const express = require ("express");
 const productRoutes = require ("./routes/productRoutes");
 const cartRoutes = require ("./routes/cartRoutes")
 const path = require('path');
-const listadoProductos = require ('./tienda.json');
 const listadoClientes = require (`./routes/clientes.json`)
 const productMethods = require("./api/productMethods");
 const chatJS = require("./chat");
 const { Server } = require("socket.io")
-let mensajes = require("./mensajes.json");
 const http = require("http")
-const knex = require("./db/knexMySQL")
+const {knexMySQL, knexSQLite} = require("./db/knexMySQL")
 
 const app = express();
 const server = http.createServer(app)
@@ -30,17 +28,25 @@ app.set("views", "./views")
 const port = process.env.PORT || 3000
 
 io.on(`connection`, (socket) => {
-    
-    socket.emit(`productsConected`, listadoProductos)
-    socket.on(`newProduct`, data =>{
+    knexMySQL.from("productos").select("*")
+    .then((response) =>{
+        socket.emit(`productsConected`, response)
+        socket.on(`newProduct`, data =>{
         productMethods.saveProductSocket(data)
     })
+    })
+    
 
-    socket.emit(`chatActualizado`, chat)
-    socket.on(`newMessage`, data =>{
+    knexSQLite.from("mensajes").select("*")
+    .then((response) => {
+        socket.emit(`chatActualizado`, response)
+        socket.on(`newMessage`, data =>{
         
         chat.saveMessage(data)
     })
+    })
+
+    
 })
 
 server.listen(port, () =>{

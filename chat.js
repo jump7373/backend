@@ -1,32 +1,11 @@
-const knex = require("./db/knexSQLite3")
+const { knexSQLite } = require("./db/knexMySQL")
 
 class Chat {
     constructor() {
-        this.knex = knex;
+        this.knex = knexSQLite;
     }
 
-    async createTable() {
-        try {
-            let table_exist = await this.knex.schema.hasTable("mensajes");
-            if (table_exist) {
-                return;
-
-            } else {
-                let newTabla = await this.knex.schema.createTable("mensajes", (table) => {
-                    table.increments("id").primary()
-                    table.string("email")
-                    table.string("time")
-                    table.string("message")
-
-                    return newTabla;
-                })
-            }
-
-        } catch (err) {
-            console.log("CreateTable error: ", err);
-        }
-    }
-
+    
     async saveMessage(message) {
         
         await this.knex("mensajes").insert(message)

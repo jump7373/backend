@@ -1,9 +1,9 @@
 const fs = require ("fs");
-const knex = require("./db/knexMySQL")
+const { knexMySQL } = require("./db/knexMySQL")
 
 class Contenedor {
     constructor (){
-        this.knex = knex;
+        this.knex = knexMySQL;
     }
 
     async save(object) {
@@ -17,20 +17,20 @@ class Contenedor {
 
     async getById(id) {
         
-        const product = await knex.from("productos").select("*").where({id: id})
+        const product = await this.knex.from("productos").select("*").where({id: id})
         
         return product;
     }
 
     async getAll() {
         
-        const product = await knex.from("productos").select("*")
+        const product = await this.knex.from("productos").select("*")
         
         return product;
     }
 
     async deleteById(id) {
-        const borrarProducto = await knex.from("productos").where({id: id}).del()
+        const borrarProducto = await this.knex.from("productos").where({id: id}).del()
         
         return borrarProducto;
     }
@@ -44,7 +44,7 @@ class Contenedor {
 
     async editById(id, item){
         
-        const productoEditado = await knex("productos").where({id: id}).update({
+        const productoEditado = await this.knex("productos").where({id: id}).update({
             
             title: item.title,
             descripcion: item.descripcion,
